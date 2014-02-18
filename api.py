@@ -43,6 +43,10 @@ def getAllCities(countryId, stopAtOffset=None):
         for city in currentCities:
             cid = city['id']
             name = city['title']
+            if 'area' in city.keys():
+                name += " # " + city['area']
+            if 'region' in city.keys():
+                name += " # " + city['region']
             cities[cid] = name
         percent = len(cities)/citiesCount*100
         logging.info("Fetched {:.2f}% cities".format(percent))
