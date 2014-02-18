@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-import requests, json, logging, multiprocessing
+import requests, json, logging, time
 requests_log = logging.getLogger('requests')
 requests_log.setLevel(logging.CRITICAL)
 
@@ -10,12 +10,23 @@ def callVkApi(method, params):
     requestParams = {'v': api_version}
     requestParams.update(params)
     url  = 'http://api.vk.com/method/{}'.format(method)
-    r = requests.get(url, params=requestParams)
-    data = json.loads( r.text )
+    r = getGetGet(url, requestParams)
+    data = json.loads( r )
     if 'error' in data:
         logging.exception("api call failed")
         raise Exception(data)
     return data['response']
+
+def getGetGet(url, params, attempts=10):
+    for i in range(1, attempts+1):
+        try:
+            r = requests.get(url, params=params, timeout=10)
+            return r.text
+        except Exception:
+            logging.warn("Api call failed at {} attempt, sleep {}s".format(i, 2**i))
+            time.sleep(2**i)
+
+    raise Exception("Failed to execute call {} - {}".format(url, params))
 
 def getCountry(isoCode):
     method = "database.getCountries"
