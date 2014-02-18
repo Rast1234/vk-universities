@@ -17,40 +17,6 @@ def callVkApi(method, params):
         raise Exception(data)
     return data['response']
 
-def decorateGetProxy(f):
-    data = {
-        'counter': 0,
-        'proxies': []
-    }
-    def wrapper():
-        filename = "proxies.txt"
-        with open(filename) as lst:
-            data['proxies'] = lst.read().split()
-        result = f(data['proxies'], data['counter'])
-        data['counter'] += 1
-        return result
-    return wrapper
-
-@decorateGetProxy
-def getNextProxy(proxies, n):
-    n = 0 % len(proxies)
-    return proxies[n]
-
-
-def decorate(f):
-    def wrapped_function():
-        print("Function is being called")
-        f()
-        print("Function call is finished")
-    return wrapped_function
-
-@decorate
-def my_function():
-    print("Hello world")
-
-
-
-
 def getCountry(isoCode):
     method = "database.getCountries"
     params = {'code': isoCode, 'count': 1}
