@@ -1,2 +1,2 @@
 #!/usr/bin/python
-import json,pprint; pprint.pprint(json.load(open('result.json')))
+import json,pprint,sys; pprint.pprint(json.load(open(sys.argv[1])))

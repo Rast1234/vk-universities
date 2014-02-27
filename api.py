@@ -53,12 +53,14 @@ def getAllCities(countryId, stopAtOffset=None):
         # id, important?, title, area, region
         for city in currentCities:
             cid = city['id']
-            name = city['title']
+            name = city['title'].strip()
+            area = ''
+            region = ''
             if 'area' in city.keys():
-                name += " # " + city['area']
+                area = city['area'].strip()
             if 'region' in city.keys():
-                name += " # " + city['region']
-            cities[cid] = name
+                region = city['region'].strip()
+            cities[cid] = {'name': name, 'area': area, 'region': region}
         percent = len(cities)/citiesCount*100
         logging.info("Fetched {:.2f}% cities".format(percent))
         print("Fetched {:.2f}% cities".format(percent))
@@ -79,8 +81,8 @@ def getAllUniversities(countryId, cityId):
         # id, title
         for uni in currentUnis:
             uid = uni['id']
-            name = uni['title']
-            universities[uid] = name
+            name = uni['title'].strip()
+            universities[uid] = {'name': name}
     return universities
 
 def getAllFaculties(universityId):
@@ -98,8 +100,8 @@ def getAllFaculties(universityId):
         # id, title
         for faculty in currentFaculties:
             fid = faculty['id']
-            name = faculty['title']
-            faculties[fid] = name
+            name = faculty['title'].strip()
+            faculties[fid] = {'name': name}
     return faculties
 
 
